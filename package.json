@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "lint:fix": "standard --fix"
+  },
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -16,5 +20,13 @@
     "request": "^2.83.0",
     "url-pattern": "^1.0.3",
     "winston": "^2.4.0"
+  },
+  "devDependencies": {
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "env": [
+      "mocha"
+    ]
   }
 }
