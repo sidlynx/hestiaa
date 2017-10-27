@@ -22,8 +22,12 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "pre-commit": "^1.2.2",
     "standard": "^10.0.3"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "standard": {
     "env": [
       "mocha"
