@@ -1,0 +1,20 @@
+{
+  "name": "hestiaa",
+  "version": "0.0.1",
+  "description": "Reusable elements of hbp microservices",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-busboy": "^6.0.1",
+    "express-winston": "^2.4.0",
+    "indicative": "^3.0.0",
+    "jsonwebtoken": "^8.1.0",
+    "moment": "^2.19.1",
+    "mongorito": "^3.0.4",
+    "request": "^2.83.0",
+    "url-pattern": "^1.0.3",
+    "winston": "^2.4.0"
+  }
+}
