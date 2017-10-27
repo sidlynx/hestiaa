@@ -29,6 +29,6 @@ module.exports = {
     Entity: require('./lib/model/entity')
   },
   test: {
-    ApiRequest: require('./lib/test/apiRequest')
+    apiRequest: require('./lib/test/apiRequest')
   }
 }
