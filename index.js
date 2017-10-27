@@ -2,8 +2,8 @@
 
 module.exports = {
   errors: {
-    ResourceNotFoundError: require('./lib/error/resourceNotFoundError'),
-    ValidationError: require('./lib/error/validationError')
+    ResourceNotFoundError: require('./lib/errors/resourceNotFoundError'),
+    ValidationError: require('./lib/errors/validationError')
   },
   http: {
     catchError: require('./lib/http/catchError'),
