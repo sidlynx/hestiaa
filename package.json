@@ -4,7 +4,7 @@
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/**/*.spec.js",
+    "test": "mocha 'test/**/*.spec.js'",
     "lint": "standard",
     "lint:fix": "standard --fix"
   },
