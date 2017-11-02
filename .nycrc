@@ -1,0 +1,25 @@
+{
+    "reporter": [
+        "lcov",
+        "html",
+        "text"
+    ],
+    "include": [
+        "lib/**/*.js"
+    ],
+    "exclude": [
+        "lib/test/**"
+    ],
+    "watermarks": {
+      "lines": [85, 92],
+      "functions": [85, 92],
+      "branches": [69, 76],
+      "statements": [85, 92]
+    },
+    "report-dir": "./.coverage",
+    "all": true,
+    "per-file": true,
+    "lines": 85,
+    "functions": 85,
+    "check-coverage": false
+}

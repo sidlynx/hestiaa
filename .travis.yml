@@ -5,7 +5,7 @@ cache:
   yarn: true
   directories:
     - node_modules
-scripts:
-  - yarn install
+script:
   - yarn lint
   - yarn test
+after_success: yarn coveralls

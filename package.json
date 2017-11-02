@@ -4,7 +4,8 @@
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
   "scripts": {
-    "test": "mocha 'test/**/*.spec.js'",
+    "test": "nyc mocha 'test/**/*.spec.js'",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "standard",
     "lint:fix": "standard --fix"
   },
@@ -26,6 +27,8 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "coveralls": "^3.0.0",
+    "nyc": "^11.3.0",
     "pre-commit": "^1.2.2",
     "standard": "^10.0.3"
   },
