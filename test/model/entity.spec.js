@@ -187,4 +187,11 @@ describe('model/Entity', function () {
     expect(parent.getEmbeded('childrens', testData[3].id)).to.eql(testData[3].entity)
     expect(parent.getEmbeded).withArgs('childrens', 'nonExistantId').to.throwException()
   })
+  it('Should clear all fields of entity', async function () {
+    let entity = new Entity({'_id': '1234567', 'name': 'Foo', 'age': 12})
+
+    await entity.clear()
+    expect(entity.store.getState().fields).to.eql({'_id': '1234567'})
+    expect(entity.store.getState().unset).to.eql(['name', 'age'])
+  })
 })
