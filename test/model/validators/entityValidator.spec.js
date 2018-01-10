@@ -7,7 +7,7 @@ describe('model/validators/entityValidator', () => {
   let entity = new Entity()
   afterEach(() => sinon.restore())
 
-  it.only('Should pass in valid entity', async () => {
+  it('Should pass in valid entity', async () => {
     let isValidStub = sinon.stub(entity, 'isValid')
     isValidStub.resolves(true)
     await validate(entity,
@@ -19,7 +19,7 @@ describe('model/validators/entityValidator', () => {
     expect(isValidStub.called).to.be(true)
   })
 
-  it.only('Should pass in valid entity without specifying type', async () => {
+  it('Should pass in valid entity without specifying type', async () => {
     let isValidStub = sinon.stub(entity, 'isValid')
     isValidStub.resolves(true)
     await validate(entity,
@@ -30,7 +30,7 @@ describe('model/validators/entityValidator', () => {
     expect(isValidStub.called).to.be(true)
   })
 
-  it.only('Should reject wrong entity type', async () => {
+  it('Should reject wrong entity type', async () => {
     let isValidStub = sinon.stub(entity, 'isValid')
     isValidStub.resolves(true)
     let expectedError
@@ -48,7 +48,7 @@ describe('model/validators/entityValidator', () => {
     expect(expectedError).not.to.be(undefined)
   })
 
-  it.only('Should reject if entity is not valid', async () => {
+  it('Should reject if entity is not valid', async () => {
     let isValidStub = sinon.stub(entity, 'isValid')
     isValidStub.throws(new Error())
     let expectedError
