@@ -22,12 +22,12 @@ describe('model/BaseValidator', () => {
     let indicativeSanitizeStub = sinon.stub(indicative, 'sanitize')
     let sanitizationsStub = sinon.stub(BaseValidator, 'sanitizations')
 
-    sanitizationsStub.returns({foo: 'required'})
+    sanitizationsStub.returns({foo: 'scape'})
     BaseValidator.sanitize({foo: 'bar'})
 
     expect(indicativeSanitizeStub.withArgs(
       {foo: 'bar'},
-      {_id: 'toObjectId', foo: 'required'}
+      {_id: 'toObjectId', foo: 'scape'}
     ).called).to.be(true)
   })
 
@@ -35,12 +35,12 @@ describe('model/BaseValidator', () => {
     let indicativeSanitizeStub = sinon.stub(indicative, 'sanitize')
     let sanitizationsStub = sinon.stub(BaseValidator, 'sanitizations')
 
-    sanitizationsStub.returns({_id: 'integer|above:0', foo: 'required'})
+    sanitizationsStub.returns({_id: 'to_int', foo: 'scape'})
     BaseValidator.sanitize({foo: 'bar'})
 
     expect(indicativeSanitizeStub.withArgs(
       {foo: 'bar'},
-      {_id: 'integer|above:0', foo: 'required'}
+      {_id: 'to_int', foo: 'scape'}
     ).called).to.be(true)
   })
 })
