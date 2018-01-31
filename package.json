@@ -21,7 +21,9 @@
     "mocha": "^4.1.0",
     "moment": "^2.20.1",
     "mongorito": "^3.0.4",
+    "nock": "^9.1.6",
     "request": "^2.83.0",
+    "request-promise": "^4.2.2",
     "sinon": "^4.1.4",
     "url-pattern": "^1.0.3",
     "winston": "^2.4.0"

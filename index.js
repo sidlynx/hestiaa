@@ -30,5 +30,8 @@ module.exports = {
   },
   test: {
     apiRequest: require('./lib/test/apiRequest')
+  },
+  utils: {
+    circuitBreaker: require('./lib/utils/circuitBreaker')
   }
 }
