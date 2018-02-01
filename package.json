@@ -18,6 +18,7 @@
     "express-winston": "^2.4.0",
     "indicative": "git://github.com/pinguet62/indicative.git#c3385bc619df5568b51380f9262c0761be3d67db",
     "jsonwebtoken": "^8.1.0",
+    "lodash": "^4.17.4",
     "mocha": "^4.1.0",
     "moment": "^2.20.1",
     "mongorito": "^3.0.4",
