@@ -187,11 +187,129 @@ describe('model/Entity', function () {
     expect(parent.getEmbeded('childrens', testData[3].id)).to.eql(testData[3].entity)
     expect(parent.getEmbeded).withArgs('childrens', 'nonExistantId').to.throwException()
   })
+
   it('Should clear all fields of entity', async function () {
     let entity = new Entity({'_id': '1234567', 'name': 'Foo', 'age': 12})
 
     await entity.clear()
     expect(entity.store.getState().fields).to.eql({'_id': '1234567'})
     expect(entity.store.getState().unset).to.eql(['name', 'age'])
+  })
+
+  describe('#_filterFields()', () => {
+    it('Undeclared properties should be filtered', () => {
+      let paths = [
+        'first',
+        'second'
+      ]
+      let input = {
+        first: 'x',
+        second: 'x',
+        other: 'removed'
+      }
+
+      let output = Entity._filterFields(input, paths)
+
+      expect(output).to.eql({
+        first: 'x',
+        second: 'x'
+      })
+    })
+
+    it('Final declared field should accept any sub-property', () => {
+      let paths = [
+        'attr'
+      ]
+      let input = {
+        attr: {
+          first: 'x',
+          second: 'x'
+        }
+      }
+
+      let output = Entity._filterFields(input, paths)
+
+      expect(output).to.eql({
+        attr: {
+          first: 'x',
+          second: 'x'
+        }
+      })
+    })
+
+    it('When declare sub-property, other undeclared sub-properties should be filtered', () => {
+      let paths = [
+        'sub.only'
+      ]
+      let input = {
+        sub: {
+          only: 'x',
+          other: 'removed'
+        }
+      }
+
+      let output = Entity._filterFields(input, paths)
+
+      expect(output).to.eql({
+        sub: {
+          only: 'x'
+        }
+      })
+    })
+
+    it('When declare array, should process sub-items', () => {
+      let paths = [
+        'simple.*',
+        'complex.*.only'
+      ]
+      let input = {
+        simple: ['x', 'x', 'x'],
+        complex: [
+          {
+            only: 'x',
+            other: 'removed'
+          },
+          {
+            only: 'x',
+            other: 'removed'
+          }
+        ]
+      }
+
+      let output = Entity._filterFields(input, paths)
+
+      expect(output).to.eql({
+        simple: ['x', 'x', 'x'],
+        complex: [
+          {
+            only: 'x'
+          },
+          {
+            only: 'x'
+          }
+        ]
+      })
+    })
+  })
+
+  describe('#massAssign()', () => {
+    it('Should filter data using "_filterFields()"', () => {
+      let validations = {'a': '1', 'b.c': '23', 'd': '4'}
+      let readOnlyProps = ['d', 'e.f']
+      let input = {'foo': 'bar'}
+      let filtered = sinon.stub()
+
+      sinon.stub(Entity.prototype, '__getValidator').returns({validations: () => validations})
+      sinon.stub(Entity.prototype, '__readOnlyProps').returns(readOnlyProps)
+
+      let filterFieldsStub = sinon.stub(Entity, '_filterFields').returns(filtered)
+      let setStub = sinon.stub(Entity.prototype, 'set')
+
+      let entity = new Entity()
+      entity.massAssign(input)
+
+      expect(filterFieldsStub.withArgs(input, ['a', 'b.c']).called).to.be(true)
+      expect(setStub.withArgs(filtered).called).to.be(true)
+    })
   })
 })
