@@ -32,6 +32,8 @@ module.exports = {
     apiRequest: require('./lib/test/apiRequest')
   },
   utils: {
-    circuitBreaker: require('./lib/utils/circuitBreaker')
+    circuitBreaker: require('./lib/utils/circuitBreaker'),
+    currentUser: require('./lib/utils/currentUser'),
+    mongoritoUtils: require('./lib/utils/mongoritoUtils')
   }
 }
