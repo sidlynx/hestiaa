@@ -15,22 +15,13 @@ class SampleValidator extends BaseValidator {
   }
 }
 
-class Product extends Entity {
-  __getValidator () {
-    return SampleValidator
-  }
-}
-
-Product.use(MongoritoUtils.embeddedTraceabilityPlugin)
-
 class Box extends Entity {
   __getValidator () {
     return SampleValidator
   }
 }
 
-Box.embeds('products', Product)
-Box.use(MongoritoUtils.rootTraceabilityPlugin)
+Box.use(MongoritoUtils.traceabilityPlugin)
 
 describe('utils/mongoritoUtils', () => {
   afterEach(() => sinon.restore())
@@ -39,9 +30,11 @@ describe('utils/mongoritoUtils', () => {
   const OTHER = 'other'
   const NOW = new Date()
   const AFTER = new Date(NOW.getTime() + 99999999)
+  let currentUserGetValueStub
   let nowStub
   beforeEach('Mock Date', () => {
-    nowStub = sinon.stub(MongoritoUtils, '_now').returns(NOW)
+    currentUserGetValueStub = sinon.stub(CurrentUser, 'getValue').returns(ME)
+    nowStub = sinon.stub(MongoritoUtils, 'now').returns(NOW)
   })
 
   let fillFieldsSpy
@@ -66,67 +59,40 @@ describe('utils/mongoritoUtils', () => {
     sinon.stub(Box, 'getCollection').resolves(getCollectionFake)
   })
 
-  describe('#rootTraceabilityPlugin', () => {
-    it('#save() for "insert" should fill 4 fields', done => {
-      CurrentUser._getNamespace().run(async () => {
-        CurrentUser.setValue(ME)
+  describe('#traceabilityPlugin', () => {
+    it('#save() for "insert" should fill 4 fields', async () => {
+      let entity = new Box({foo: 'bar'})
+      await entity.save()
 
-        let entity = new Box({foo: 'bar'})
-
-        await entity.save()
-
-        // current entity
-        expect(entity.get('createdAt')).to.eql(NOW)
-        expect(entity.get('updatedAt')).to.eql(NOW)
-        expect(entity.get('createdBy')).to.eql(ME)
-        expect(entity.get('updatedBy')).to.eql(ME)
-        // sent to database
-        expect(insertStub.called).to.be(true)
-
-        done()
-      })
+      // current entity
+      expect(entity.get('createdAt')).to.eql(NOW)
+      expect(entity.get('updatedAt')).to.eql(NOW)
+      expect(entity.get('createdBy')).to.eql(ME)
+      expect(entity.get('updatedBy')).to.eql(ME)
+      // sent to database
+      expect(insertStub.called).to.be(true)
     })
 
-    it('#save() for "update" should fill only 2 "updated" fields', done => {
-      CurrentUser._getNamespace().run(async () => {
-        CurrentUser.setValue(ME)
+    it('#save() for "update" should fill only 2 "updated" fields', async () => {
+      let entity = new Box({foo: 'bar'})
+      await entity.save()
 
-        let entity = new Box({foo: 'bar'})
-        await entity.save()
+      nowStub.reset()
+      nowStub.returns(AFTER)
 
-        nowStub.reset()
-        nowStub.returns(AFTER)
-        CurrentUser.setValue(OTHER)
+      currentUserGetValueStub.restore()
+      sinon.stub(CurrentUser, 'getValue').returns(OTHER)
 
-        entity.set('description', 'any')
-        await entity.save()
+      entity.set('description', 'any')
+      await entity.save()
 
-        // current entity
-        expect(entity.get('createdAt')).to.eql(NOW)
-        expect(entity.get('updatedAt')).to.eql(AFTER)
-        expect(entity.get('createdBy')).to.eql(ME)
-        expect(entity.get('updatedBy')).to.eql(OTHER)
-        // sent to database
-        expect(updateStub.called).to.be(true)
-
-        done()
-      })
-    })
-  })
-
-  describe('#embeddedTraceabilityPlugin', () => {
-    it('Should call "_fillFields" on supported actions', async () => {
-      let entity = new Product({foo: 'bar'})
-      expect(fillFieldsSpy.called).to.be(true)
-      restoreAndSpyFillFields()
-
-      entity.set('comment', 42)
-      expect(fillFieldsSpy.called).to.be(true)
-      restoreAndSpyFillFields()
-
-      entity.unset('comment')
-      expect(fillFieldsSpy.called).to.be(true)
-      restoreAndSpyFillFields()
+      // current entity
+      expect(entity.get('createdAt')).to.eql(NOW)
+      expect(entity.get('updatedAt')).to.eql(AFTER)
+      expect(entity.get('createdBy')).to.eql(ME)
+      expect(entity.get('updatedBy')).to.eql(OTHER)
+      // sent to database
+      expect(updateStub.called).to.be(true)
     })
   })
 })

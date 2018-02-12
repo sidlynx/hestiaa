@@ -4,11 +4,11 @@ const Mongorito = require('mongorito')
 const Entity = require('../../lib/model/entity')
 const ValidationError = require('../../lib/errors/validationError')
 const ResourceNotFoundError = require('../../lib/errors/resourceNotFoundError')
+const CurrentUser = require('../../lib/utils/currentUser')
+const MongoritoUtils = require('../../lib/utils/mongoritoUtils')
 
-describe('model/Entity', function () {
-  afterEach(function () {
-    sinon.restore()
-  })
+describe('model/Entity', () => {
+  afterEach(() => sinon.restore())
 
   it('Should sanitize and validate when saving', async function () {
     let entity = new Entity({})
@@ -48,121 +48,152 @@ describe('model/Entity', function () {
     expect(sanitizeSpy.callCount).to.be(1)
   })
 
-  it('Should embed new entity if valid', async function () {
-    let parent = new Entity({})
-    let child = new Entity({})
+  describe('#embed()', () => {
+    it('Should embed new entity if valid', async function () {
+      let parent = new Entity({})
+      let child = new Entity({})
 
-    expect(child.get('_id')).not.to.be.ok()
+      expect(child.get('_id')).not.to.be.ok()
 
-    let isValidStub = sinon.stub(child, 'isValid')
-    isValidStub.resolves(true) // No validation errors
+      let isValidStub = sinon.stub(child, 'isValid')
+      isValidStub.resolves(true) // No validation errors
 
-    await parent.embed('children', child)
-
-    expect(isValidStub.called).to.be(true)
-    expect(child.get('_id')).to.be.ok()
-  })
-
-  it('Should NOT embed entity if INvalid', async function () {
-    let parent = new Entity({})
-    let child = new Entity({})
-
-    expect(child.get('_id')).not.to.be.ok()
-
-    let raisedError
-    let isValidStub = sinon.stub(child, 'isValid')
-
-    isValidStub.rejects(new ValidationError('invalid child')) // No validation errors
-
-    try {
       await parent.embed('children', child)
-    } catch (err) {
-      raisedError = err
-    }
 
-    expect(raisedError).to.be.a(ValidationError)
-  })
+      expect(isValidStub.called).to.be(true)
+      expect(child.get('_id')).to.be.ok()
+    })
 
-  it('Should embed existing entity if valid', async function () {
-    // given
-    let parent = new Entity({})
-    let child = new Entity({})
+    it('Should NOT embed entity if INvalid', async function () {
+      let parent = new Entity({})
+      let child = new Entity({})
 
-    expect(child.get('_id')).not.to.be.ok()
+      expect(child.get('_id')).not.to.be.ok()
 
-    let isValidStub = sinon.stub(child, 'isValid')
-    isValidStub.resolves(true) // No validation errors
+      let raisedError
+      let isValidStub = sinon.stub(child, 'isValid')
 
-    await parent.embed('children', child)
+      isValidStub.rejects(new ValidationError('invalid child')) // No validation errors
 
-    expect(parent.get('children').length).to.be(1)
-    let id = child.get('_id')
-    // when
-    child.set('name', 'a new name for the same equipment')
-    await parent.embed('children', child)
-    // then
-    expect(parent.get('children').length).to.be(1)
-    expect(child.get('_id')).to.be(id)
-  })
+      try {
+        await parent.embed('children', child)
+      } catch (err) {
+        raisedError = err
+      }
 
-  it('Should NOT embed existing entity if INvalid', async function () {
-    // given
-    let parent = new Entity({})
-    let child = new Entity({name: 'Initial name'})
+      expect(raisedError).to.be.a(ValidationError)
+    })
 
-    expect(child.get('_id')).not.to.be.ok()
+    it('Should embed existing entity if valid', async function () {
+      // given
+      let parent = new Entity({})
+      let child = new Entity({})
 
-    let isValidStub = sinon.stub(child, 'isValid')
-    isValidStub.resolves(true) // No validation errors
-    isValidStub.onSecondCall().rejects(new ValidationError('Should not work on update')) // No validation errors
+      expect(child.get('_id')).not.to.be.ok()
 
-    await parent.embed('children', child)
+      let isValidStub = sinon.stub(child, 'isValid')
+      isValidStub.resolves(true) // No validation errors
 
-    expect(parent.get('children').length).to.be(1)
-    // when
-    child = new Entity({_id: child.get('_id'), name: 'a new name for the same equipment'})
-    isValidStub = sinon.stub(child, 'isValid')
-    isValidStub.rejects(new ValidationError('Should not work on update')) // No validation errors
-
-    let raisedError
-    try {
       await parent.embed('children', child)
-    } catch (err) {
-      raisedError = err
-    }
-    // then
-    expect(raisedError).to.be.a(ValidationError)
-    expect(parent.get('children').length).to.be(1)
-    expect(parent.get('children')[0].get('name')).to.be('Initial name')
-  })
 
-  it('Should NOT embed entity if incorrect id', async function () {
-    // given
-    let parent = new Entity({})
-    let child = new Entity({name: 'Initial name'})
-
-    expect(child.get('_id')).not.to.be.ok()
-
-    let isValidStub = sinon.stub(child, 'isValid')
-    isValidStub.resolves(true) // No validation errors
-    await parent.embed('children', child)
-
-    expect(parent.get('children').length).to.be(1)
-    // when
-    child = new Entity({_id: 'an incorrect id', name: 'a new name for the same equipment'})
-    isValidStub = sinon.stub(child, 'isValid')
-    isValidStub.resolves(true) // No validation errors
-
-    let raisedError
-    try {
+      expect(parent.get('children').length).to.be(1)
+      let id = child.get('_id')
+      // when
+      child.set('name', 'a new name for the same equipment')
       await parent.embed('children', child)
-    } catch (err) {
-      raisedError = err
-    }
-    // then
-    expect(raisedError).to.be.a(ResourceNotFoundError)
-    expect(parent.get('children').length).to.be(1)
-    expect(parent.get('children')[0].get('name')).to.be('Initial name')
+      // then
+      expect(parent.get('children').length).to.be(1)
+      expect(child.get('_id')).to.be(id)
+    })
+
+    it('Should NOT embed existing entity if INvalid', async function () {
+      // given
+      let parent = new Entity({})
+      let child = new Entity({name: 'Initial name'})
+
+      expect(child.get('_id')).not.to.be.ok()
+
+      let isValidStub = sinon.stub(child, 'isValid')
+      isValidStub.resolves(true) // No validation errors
+      isValidStub.onSecondCall().rejects(new ValidationError('Should not work on update')) // No validation errors
+
+      await parent.embed('children', child)
+
+      expect(parent.get('children').length).to.be(1)
+      // when
+      child = new Entity({_id: child.get('_id'), name: 'a new name for the same equipment'})
+      isValidStub = sinon.stub(child, 'isValid')
+      isValidStub.rejects(new ValidationError('Should not work on update')) // No validation errors
+
+      let raisedError
+      try {
+        await parent.embed('children', child)
+      } catch (err) {
+        raisedError = err
+      }
+      // then
+      expect(raisedError).to.be.a(ValidationError)
+      expect(parent.get('children').length).to.be(1)
+      expect(parent.get('children')[0].get('name')).to.be('Initial name')
+    })
+
+    it('Should NOT embed entity if incorrect id', async function () {
+      // given
+      let parent = new Entity({})
+      let child = new Entity({name: 'Initial name'})
+
+      expect(child.get('_id')).not.to.be.ok()
+
+      let isValidStub = sinon.stub(child, 'isValid')
+      isValidStub.resolves(true) // No validation errors
+      await parent.embed('children', child)
+
+      expect(parent.get('children').length).to.be(1)
+      // when
+      child = new Entity({_id: 'an incorrect id', name: 'a new name for the same equipment'})
+      isValidStub = sinon.stub(child, 'isValid')
+      isValidStub.resolves(true) // No validation errors
+
+      let raisedError
+      try {
+        await parent.embed('children', child)
+      } catch (err) {
+        raisedError = err
+      }
+      // then
+      expect(raisedError).to.be.a(ResourceNotFoundError)
+      expect(parent.get('children').length).to.be(1)
+      expect(parent.get('children')[0].get('name')).to.be('Initial name')
+    })
+
+    it('Should update traceability fields', async () => {
+      sinon.stub(Entity.prototype, 'isValid').resolves(true)
+      let baseEntity = new Entity()
+      let embeddedEntity = new Entity()
+
+      const nowCreate = new Date()
+      let MongoritoUtilsNowStub = sinon.stub(MongoritoUtils, 'now').returns(nowCreate)
+      const userIdCreate = 'userIdCreate'
+      let CurrentUserGetValueStub = sinon.stub(CurrentUser, 'getValue').returns(userIdCreate)
+      await baseEntity.embed('col', embeddedEntity)
+      expect(embeddedEntity.get('createdAt')).to.eql(nowCreate)
+      expect(embeddedEntity.get('createdBy')).to.eql(userIdCreate)
+      expect(embeddedEntity.get('updatedAt')).to.eql(nowCreate)
+      expect(embeddedEntity.get('updatedBy')).to.eql(userIdCreate)
+
+      MongoritoUtilsNowStub.restore()
+      CurrentUserGetValueStub.restore()
+
+      const nowUpdate = new Date()
+      sinon.stub(MongoritoUtils, 'now').returns(nowUpdate)
+      const userIdUpdate = 'userIdUpdate'
+      sinon.stub(CurrentUser, 'getValue').returns(userIdUpdate)
+      await baseEntity.embed('col', embeddedEntity)
+      expect(embeddedEntity.get('createdAt')).to.eql(nowCreate)
+      expect(embeddedEntity.get('createdBy')).to.eql(userIdCreate)
+      expect(embeddedEntity.get('updatedAt')).to.eql(nowUpdate)
+      expect(embeddedEntity.get('updatedBy')).to.eql(userIdUpdate)
+    })
   })
 
   it('Should retrieve an specific embeded entity', async function () {
