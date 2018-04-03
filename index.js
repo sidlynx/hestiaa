@@ -2,6 +2,7 @@
 
 module.exports = {
   errors: {
+    ForbiddenError: require('./lib/errors/forbiddenError'),
     ResourceNotFoundError: require('./lib/errors/resourceNotFoundError'),
     ValidationError: require('./lib/errors/validationError')
   },
