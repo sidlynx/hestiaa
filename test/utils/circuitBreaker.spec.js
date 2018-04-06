@@ -17,6 +17,14 @@ describe('utils/CircuitBreaker', () => {
   const serviceId = 'any'
 
   describe('#request()', () => {
+    describe('Parameters', () => {
+      it('Should have adequate default settings', () => {
+        let config = CircuitBreaker.getDefaultConfiguration()
+        expect(config.attemptsCount).to.be(3)
+        expect(config.sleepTime).to.be(200)
+        expect(config.reactivateAfter).to.be(30000)
+      })
+    })
     describe('Returned value', () => {
       it('Should return last successful response', async () => {
         let mock1 = nock(URL).get('/').reply(501, 'first')
