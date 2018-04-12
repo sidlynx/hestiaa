@@ -8,7 +8,8 @@ module.exports = {
   },
   http: {
     catchError: require('./lib/http/catchError'),
-    HttpResponseBuilder: require('./lib/http/httpResponseBuilder')
+    HttpResponseBuilder: require('./lib/http/httpResponseBuilder'),
+    paginator: require('./lib/http/paginator')
   },
   middleware: {
     LoggingHandler: require('./lib/middleware/loggingHandler'),
