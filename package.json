@@ -4,7 +4,7 @@
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha 'test/**/*.spec.js'",
+    "test": "nyc mocha \"test/**/*.spec.js\"",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "lint": "standard",
     "lint:fix": "standard --fix"
