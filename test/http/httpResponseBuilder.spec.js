@@ -27,7 +27,7 @@ describe('http/httpResonseBuilder', () => {
         expect(res.json.withArgs(expectedOutput).called).to.be(true)
       })
 
-      it('Should support undefined input', () => {
+      it('Should support "undefined" input', () => {
         let input
 
         let res = {
@@ -44,6 +44,25 @@ describe('http/httpResonseBuilder', () => {
 
         expect(res.json.withArgs(expectedOutput).called).to.be(true)
       })
+
+      let inputs = [false, 0, false, '']
+      inputs.forEach(input =>
+        it(`Should support "${input}" inputs who are considered as "false"`, () => {
+          let res = {
+            json: sinon.stub()
+          }
+
+          respond(input, null, res)
+
+          let expectedOutput = {
+            status: 'success',
+            data: input,
+            errors: []
+          }
+
+          expect(res.json.withArgs(expectedOutput).called).to.be(true)
+        })
+      )
     })
 
     context('With paginated result', () => {
