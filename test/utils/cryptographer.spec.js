@@ -84,4 +84,35 @@ describe('utils/Cryptographer', () => {
     expect(await Cryptographer.matchWithHash(input, hash)).to.be(true)
     expect(await Cryptographer.matchWithHash(badInput, hash)).to.be(false)
   })
+
+  it('Return of bcrypt should not equal input', async () => {
+    const userInput = 'doppelganger81'
+    expect(await Cryptographer.bcrypt(userInput)).to.not.be(userInput)
+  })
+
+  it('Should be able to match a password using Bcrypt encryption ', async () => {
+    const bcryptHash = '$2a$10$VY8w4MCJLbMo/G0jX/Mteu5XXgycs3ymooGDgSPXGLIf4OoqofQGK'
+    const userInput = 'doppelganger81'
+    expect(await Cryptographer.matchWithBcrypt(userInput, bcryptHash)).to.be(true)
+  })
+
+  it('Should return false if input does not match output of bcrypt encryption ', async () => {
+    const bcryptHash = '$2a$10$VY8w4MCJLbMo/G0jX/Mteu5XXgycs3ymooGDgSPXGLIf4OoqofQGK'
+    const userInput = 'doppelganger82'
+    expect(await Cryptographer.matchWithBcrypt(userInput, bcryptHash)).to.be(false)
+  })
+
+  it('Should return undefined if a server error happens when hashing with Bcrypt ', async () => {
+    const userInput = 'doppelganger81'
+    let error
+
+    try {
+    // Salt key is not supplied, so it should throw an error handled by the catch
+      await Cryptographer.bcrypt(userInput)
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).to.be(undefined)
+  })
 })
