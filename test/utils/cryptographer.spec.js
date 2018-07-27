@@ -101,18 +101,4 @@ describe('utils/Cryptographer', () => {
     const userInput = 'doppelganger82'
     expect(await Cryptographer.matchWithBcrypt(userInput, bcryptHash)).to.be(false)
   })
-
-  it('Should return undefined if a server error happens when hashing with Bcrypt ', async () => {
-    const userInput = 'doppelganger81'
-    let error
-
-    try {
-    // Salt key is not supplied, so it should throw an error handled by the catch
-      await Cryptographer.bcrypt(userInput)
-    } catch (e) {
-      error = e
-    }
-
-    expect(error).to.be(undefined)
-  })
 })
