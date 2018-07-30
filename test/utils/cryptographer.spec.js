@@ -98,7 +98,7 @@ describe('utils/Cryptographer', () => {
 
     it('Bcrypt hash must not be re-hashed', async () => {
       const hash = '$2a$10$HrZDdJMGy6uUUSzKKDipnusc8zuYzrPalhlOyJAcKkZZubzng0de6'
-      expect(await Cryptographer.bcrypt(hash)).to.be.equal(hash)
+      expect(Cryptographer.bcrypt(hash)).to.be.equal(hash)
     })
   })
 
