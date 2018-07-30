@@ -90,6 +90,11 @@ describe('utils/Cryptographer', () => {
     expect(await Cryptographer.bcrypt(userInput)).to.not.be(userInput)
   })
 
+  it('Bcrypt hash must not be re-hashed', async () => {
+    const hash = '$2a$10$HrZDdJMGy6uUUSzKKDipnusc8zuYzrPalhlOyJAcKkZZubzng0de6'
+    expect(await Cryptographer.bcrypt(hash)).to.be.equal(hash)
+  })
+
   it('Should be able to match a password using Bcrypt encryption ', async () => {
     const bcryptHash = '$2a$10$VY8w4MCJLbMo/G0jX/Mteu5XXgycs3ymooGDgSPXGLIf4OoqofQGK'
     const userInput = 'doppelganger81'
