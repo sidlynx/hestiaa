@@ -95,6 +95,11 @@ describe('utils/Cryptographer', () => {
       expect(bcryptHash).to.not.eql(userInput)
       expect(bcryptHash).to.match(/^\$2.*/)
     })
+
+    it('Bcrypt hash must not be re-hashed', () => {
+      const hash = '$2a$10$HrZDdJMGy6uUUSzKKDipnusc8zuYzrPalhlOyJAcKkZZubzng0de6'
+      expect(Cryptographer.bcrypt(hash)).to.be.equal(hash)
+    })
   })
 
   describe('matchWithBcrypt()', () => {
