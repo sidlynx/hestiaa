@@ -2,7 +2,7 @@
 
 module.exports = {
   logging: {
-    LOGGER: require('./lib/logging/logger')
+    logger: require('./lib/logging/logger')
   },
   errors: {
     ForbiddenError: require('./lib/errors/forbiddenError'),
