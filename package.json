@@ -1,6 +1,6 @@
 {
   "name": "hestiaa",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
   "scripts": {
