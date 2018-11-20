@@ -1,7 +1,7 @@
 const expect = require('expect.js')
 const sinon = require('sinon').createSandbox()
 
-const {respond} = require('../../lib/http/httpResponseBuilder')
+const { respond } = require('../../lib/http/httpResponseBuilder')
 const PaginatedResult = require('../../lib/http/paginatedResult')
 
 describe('http/httpResonseBuilder', () => {

@@ -1,7 +1,7 @@
 const expect = require('expect.js')
 const sinon = require('sinon').createSandbox()
 
-const {findPaginated} = require('../../lib/http/paginator')
+const { findPaginated } = require('../../lib/http/paginator')
 const PaginatedResult = require('../../lib/http/paginatedResult')
 
 const Model = require('mongorito').Model

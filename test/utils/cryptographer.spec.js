@@ -1,6 +1,6 @@
 const Cryptographer = require('../../lib/utils/cryptographer')
 const expect = require('expect.js')
-const sinon = require('sinon').sandbox.create()
+const sinon = require('sinon')
 
 describe('utils/Cryptographer', () => {
   beforeEach(() => sinon.stub(process, 'env').value({ ...process.env, APP_KEY: 'secret_app_key_123' }))
@@ -72,8 +72,12 @@ describe('utils/Cryptographer', () => {
       // To make sure that the salt algorithm will not change. Since it's
       // change would break the matching capabilities off all passwords
       // hashed previously ⚠
-      expect(Cryptographer.hash('secret123')).to.eql('767a426b17669278c7bc3461bc93da2a77dbe5f198e9c8e7e85037cb1b595dee83c01c703c4a252de6ff1afe90d8fa563fae2f8e9adfcf614ff8d0f9058bebb6')
-      expect(Cryptographer.hash('foobar@_42_2018')).to.eql('6285214d264ce229f02b80bcde83323af496da970eb46b6e19f37a7ef11dff2f5cdc480fbab38818e634549c85d3dd51ca3bc8dfc471de51bbaebc3ad66db9f5')
+      expect(Cryptographer.hash('secret123')).to.eql(
+        '767a426b17669278c7bc3461bc93da2a77dbe5f198e9c8e7e85037cb1b595dee83c01c703c4a252de6ff1afe90d8fa563fae2f8e9adfcf614ff8d0f9058bebb6'
+      )
+      expect(Cryptographer.hash('foobar@_42_2018')).to.eql(
+        '6285214d264ce229f02b80bcde83323af496da970eb46b6e19f37a7ef11dff2f5cdc480fbab38818e634549c85d3dd51ca3bc8dfc471de51bbaebc3ad66db9f5'
+      )
     })
 
     it('Should be able to check if hash matches', () => {

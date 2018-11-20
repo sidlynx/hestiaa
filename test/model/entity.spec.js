@@ -1,4 +1,4 @@
-const sinon = require('sinon').sandbox.create()
+const sinon = require('sinon')
 const expect = require('expect.js')
 const Mongorito = require('mongorito')
 const Entity = require('../../lib/model/entity')
@@ -109,7 +109,7 @@ describe('model/Entity', () => {
     it('Should NOT embed existing entity if INvalid', async function () {
       // given
       let parent = new Entity({})
-      let child = new Entity({name: 'Initial name'})
+      let child = new Entity({ name: 'Initial name' })
 
       expect(child.get('_id')).not.to.be.ok()
 
@@ -121,7 +121,7 @@ describe('model/Entity', () => {
 
       expect(parent.get('children').length).to.be(1)
       // when
-      child = new Entity({_id: child.get('_id'), name: 'a new name for the same equipment'})
+      child = new Entity({ _id: child.get('_id'), name: 'a new name for the same equipment' })
       isValidStub = sinon.stub(child, 'isValid')
       isValidStub.rejects(new ValidationError('Should not work on update')) // No validation errors
 
@@ -140,7 +140,7 @@ describe('model/Entity', () => {
     it('Should NOT embed entity if incorrect id', async function () {
       // given
       let parent = new Entity({})
-      let child = new Entity({name: 'Initial name'})
+      let child = new Entity({ name: 'Initial name' })
 
       expect(child.get('_id')).not.to.be.ok()
 
@@ -150,7 +150,7 @@ describe('model/Entity', () => {
 
       expect(parent.get('children').length).to.be(1)
       // when
-      child = new Entity({_id: 'an incorrect id', name: 'a new name for the same equipment'})
+      child = new Entity({ _id: 'an incorrect id', name: 'a new name for the same equipment' })
       isValidStub = sinon.stub(child, 'isValid')
       isValidStub.resolves(true) // No validation errors
 
@@ -199,14 +199,14 @@ describe('model/Entity', () => {
   it('Should retrieve an specific embeded entity', async function () {
     let parent = new Entity({})
     let testData = [
-      {name: 'foo', id: null, entity: null},
-      {name: 'bar', id: null, entity: null},
-      {name: 'baz', id: null, entity: null},
-      {name: 'doe', id: null, entity: null}
+      { name: 'foo', id: null, entity: null },
+      { name: 'bar', id: null, entity: null },
+      { name: 'baz', id: null, entity: null },
+      { name: 'doe', id: null, entity: null }
     ]
 
     for (var childTestData of testData) {
-      let child = new Entity({name: childTestData.name})
+      let child = new Entity({ name: childTestData.name })
       sinon.stub(child, 'isValid').resolves(true)
       await parent.embed('childrens', child)
 
@@ -220,10 +220,10 @@ describe('model/Entity', () => {
   })
 
   it('Should clear all fields of entity', async function () {
-    let entity = new Entity({'_id': '1234567', 'name': 'Foo', 'age': 12})
+    let entity = new Entity({ '_id': '1234567', 'name': 'Foo', 'age': 12 })
 
     await entity.clear()
-    expect(entity.store.getState().fields).to.eql({'_id': '1234567'})
+    expect(entity.store.getState().fields).to.eql({ '_id': '1234567' })
     expect(entity.store.getState().unset).to.eql(['name', 'age'])
   })
 
@@ -325,12 +325,12 @@ describe('model/Entity', () => {
 
   describe('#massAssign()', () => {
     it('Should filter data using "_filterFields()"', () => {
-      let validations = {'a': '1', 'b.c': '23', 'd': '4'}
+      let validations = { 'a': '1', 'b.c': '23', 'd': '4' }
       let readOnlyProps = ['d', 'e.f']
-      let input = {'foo': 'bar'}
+      let input = { 'foo': 'bar' }
       let filtered = sinon.stub()
 
-      sinon.stub(Entity.prototype, '__getValidator').returns({validations: () => validations})
+      sinon.stub(Entity.prototype, '__getValidator').returns({ validations: () => validations })
       sinon.stub(Entity.prototype, '__readOnlyProps').returns(readOnlyProps)
 
       let filterFieldsStub = sinon.stub(Entity, '_filterFields').returns(filtered)
