@@ -14,13 +14,15 @@ describe('http/paginator', () => {
   describe('findPaginated', () => {
     it('"count" parameter must be a positive number', async () => {
       let err = await findPaginated(ModelMock, { count: -1, offset: 99 }, {})
-        .then((x) => expect().fail(x)).catch(e => e) // must fail
+        .then(x => expect().fail(x))
+        .catch(e => e) // must fail
       expect(err).to.be.a(RangeError)
     })
 
     it('"offset" parameter must be a positive number', async () => {
       let err = await findPaginated(ModelMock, { count: 99, offset: -1 }, {})
-        .then((x) => expect().fail(x)).catch(e => e) // must fail
+        .then(x => expect().fail(x))
+        .catch(e => e) // must fail
       expect(err).to.be.a(RangeError)
     })
 
@@ -45,7 +47,7 @@ describe('http/paginator', () => {
         count: sinon.stub().resolves(30)
       }
       getCollectionStub.resolves(collectionStub)
-      let result = await (findPaginated(ModelMock, { count: 5, offset: 10 }, { userId: 'search' }))
+      let result = await findPaginated(ModelMock, { count: 5, offset: 10 }, { userId: 'search' })
 
       expect(mqueryStub.sort.withArgs({ _id: 1 }).called).to.be(true)
       expect(mqueryStub.skip.withArgs(10).called).to.be(true)

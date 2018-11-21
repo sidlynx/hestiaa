@@ -1,0 +1,16 @@
+extends: standard # require dependency "standard"
+
+env:
+  mocha: true # declare test functions: describe()/it()/...
+
+plugins:
+  - mocha # require dependency "eslint-plugin-mocha"
+rules:
+  no-console: error # check "console.log()"
+  mocha/no-exclusive-tests: error # check ".only()"
+  complexity: [error, 8]
+  no-lonely-if: error
+  no-else-return: error
+  no-confusing-arrow: error
+  camelcase: error
+  node/no-deprecated-api: warn
