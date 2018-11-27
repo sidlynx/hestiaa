@@ -1,4 +1,4 @@
-const sinon = require('sinon').sandbox.create()
+const sinon = require('sinon')
 const expect = require('expect.js')
 const MongoritoUtils = require('../../lib/utils/mongoritoUtils')
 const CurrentUser = require('../../lib/utils/currentUser')
@@ -54,14 +54,14 @@ describe('utils/mongoritoUtils', () => {
       insert: () => {},
       update: () => {}
     }
-    insertStub = sinon.stub(getCollectionFake, 'insert').resolves({ops: [{_id: '000000000000000000000000'}]})
+    insertStub = sinon.stub(getCollectionFake, 'insert').resolves({ ops: [{ _id: '000000000000000000000000' }] })
     updateStub = sinon.stub(getCollectionFake, 'update').resolves({})
     sinon.stub(Box, 'getCollection').resolves(getCollectionFake)
   })
 
   describe('#traceabilityPlugin', () => {
     it('#save() for "insert" should fill 4 fields', async () => {
-      let entity = new Box({foo: 'bar'})
+      let entity = new Box({ foo: 'bar' })
       await entity.save()
 
       // current entity
@@ -74,7 +74,7 @@ describe('utils/mongoritoUtils', () => {
     })
 
     it('#save() for "update" should fill only 2 "updated" fields', async () => {
-      let entity = new Box({foo: 'bar'})
+      let entity = new Box({ foo: 'bar' })
       await entity.save()
 
       nowStub.reset()

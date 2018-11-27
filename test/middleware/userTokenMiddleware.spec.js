@@ -21,7 +21,7 @@ describe('middleware/userTokenMiddleware', () => {
     })
 
     it('Should throw "ForbiddenError" if missing role', () => {
-      let req = {tokenPayload: {roles: ['expected', 'other']}}
+      let req = { tokenPayload: { roles: ['expected', 'other'] } }
       let next = sinon.stub()
 
       let error
@@ -39,7 +39,7 @@ describe('middleware/userTokenMiddleware', () => {
     it('Should call "next()" if has all roles', () => {
       const role = 'role'
 
-      let req = {tokenPayload: {roles: [role]}}
+      let req = { tokenPayload: { roles: [role] } }
       let next = sinon.stub()
 
       UserTokenMiddleware.hasRole([role])(req, null, next)

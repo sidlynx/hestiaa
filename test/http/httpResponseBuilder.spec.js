@@ -1,7 +1,7 @@
 const expect = require('expect.js')
 const sinon = require('sinon').createSandbox()
 
-const {respond} = require('../../lib/http/httpResponseBuilder')
+const { respond } = require('../../lib/http/httpResponseBuilder')
 const PaginatedResult = require('../../lib/http/paginatedResult')
 
 describe('http/httpResonseBuilder', () => {
@@ -9,7 +9,7 @@ describe('http/httpResonseBuilder', () => {
     context('With simple json', () => {
       it('Should not wrap twice response', () => {
         let input = {
-          'foo': 'bar'
+          foo: 'bar'
         }
 
         let res = {
@@ -68,7 +68,7 @@ describe('http/httpResonseBuilder', () => {
     context('With paginated result', () => {
       it('Should append _meta attributes', () => {
         let items = {
-          'foo': 'bar'
+          foo: 'bar'
         }
 
         let input = new PaginatedResult(items, 0, 1)
