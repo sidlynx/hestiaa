@@ -1,8 +1,9 @@
 {
   "name": "hestiaa",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "test": "nyc mocha \"test/**/*.spec.js\"",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
