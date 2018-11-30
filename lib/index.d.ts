@@ -11,81 +11,81 @@ declare module 'hestiaa' {
 
   export namespace errors {
     export class ForbiddenError {
-      constructor (message?: string)
+      constructor(message?: string)
     }
 
     export class ResourceNotFoundError {
-      constructor (messages: string | string[], fileName?: any, lineNumber?: any)
+      constructor(messages: string | string[], fileName?: any, lineNumber?: any)
     }
 
     export class ValidationError {
-      constructor (messages: string | string[], fileName?: any, lineNumber?: any)
+      constructor(messages: string | string[], fileName?: any, lineNumber?: any)
     }
   }
 
   export namespace http {
-    export function catchError (fn: (req: Request, res: Response, next: NextFunction) => void): (req: Request, res: Response, next: NextFunction) => void
+    export function catchError(fn: (req: Request, res: Response, next: NextFunction) => void): (req: Request, res: Response, next: NextFunction) => void
 
     export class HttpResponseBuilder {
-      static buildResponse<T = any> (fn: (req: Request) => T | Promise<T>): (req: Request, res: Response, next: NextFunction) => void
+      static buildResponse<T = any>(fn: (req: Request) => T | Promise<T>): (req: Request, res: Response, next: NextFunction) => void
     }
 
     export namespace paginator {
-      export function findPaginated<T extends ModelClass> (model: T, requestQuery: { offset: number; count: number }, query: any): PaginatedResult<T>
+      export function findPaginated<T extends ModelClass>(model: T, requestQuery: { offset: number; count: number }, query: any): PaginatedResult<T>
     }
 
     export class PaginatedResult<T> {
-      constructor (items: Array<T>, currentPage: number, totalPages: number)
+      constructor(items: Array<T>, currentPage: number, totalPages: number)
     }
   }
 
   export namespace middleware {
     export class LoggingHandler {
-      static getHandler (): RequestHandlerParams
+      static getHandler(): RequestHandlerParams
 
-      static getErrorHandler (): RequestHandlerParams
+      static getErrorHandler(): RequestHandlerParams
     }
 
     export class UserTokenMiddleware {
-      static publicRoutes (): Array<{ method: string; urlPattern: string | RegExp }>
+      static publicRoutes(): Array<{ method: string; urlPattern: string | RegExp }>
 
-      static getHandler (): RequestHandlerParams
+      static getHandler(): RequestHandlerParams
 
-      static hasRole (roles: string[]): RequestHandler
+      static hasRole(roles: string[]): RequestHandler
     }
   }
 
   export namespace model {
     export abstract class BaseValidator {
-      static /*abstract*/ validations (): object
+      static /*abstract*/ validations(): object
 
-      static /*abstract*/ sanitizations (): object
+      static /*abstract*/ sanitizations(): object
 
-      static sanitize (attributes: any): Promise<any>
+      static sanitize(attributes: any): Promise<any>
 
-      static getErrors (attributes: any): Promise<string[]>
+      static getErrors(attributes: any): Promise<string[]>
     }
 
     export abstract class Entity extends Model {
-      abstract __getValidator (): any // BaseValidator
+      abstract __getValidator(): any // BaseValidator
 
-      sanitize (): Promise<void>
+      sanitize(): Promise<void>
 
-      isValid (): Promise<boolean>
+      isValid(): Promise<boolean>
 
-      _encapsulateErrors (errors: string[]): boolean
+      _encapsulateErrors(errors: string[]): boolean
 
-      unembed (collectionName: string, value: Model): Promise<boolean>
+      unembed(collectionName: string, value: Model): Promise<boolean>
 
-      embed (collectionName: string, value: Model): Promise<Model>
+      embed(collectionName: string, value: Model): Promise<Model>
 
-      getEmbeded (collectionName: string, _id?: string | ObjectId): Model
+      getEmbeded(collectionName: string, _id?: string | ObjectId): Model
 
-      massAssign (obj: object): void
+      massAssign(obj: object): void
 
-      __readOnlyProps (): string[]
+      __readOnlyProps(): string[]
 
-      clear (): void
+      clear(): void
     }
   }
 
@@ -122,13 +122,13 @@ declare module 'hestiaa' {
     }
 
     export namespace circuitBreaker {
-      export function request (options: RequiredUriUrl & CoreOptions, cbOpts?: CircuitBreakerOptions): any
+      export function request(options: RequiredUriUrl & CoreOptions, cbOpts?: CircuitBreakerOptions): any
     }
 
     export namespace currentUser {
       export const middleware: RequestHandlerParams
 
-      export function getValue (): string
+      export function getValue(): string
     }
 
     export namespace mongoritoUtils {
@@ -138,13 +138,17 @@ declare module 'hestiaa' {
     }
 
     export namespace cryptographer {
-      export function encrypt (input: string): Promise<string>
+      export function encrypt(input: string, key?: string): Promise<string>
 
-      export function decrypt (input: string): Promise<string>
+      export function decrypt(input: string, key?: string): Promise<string>
 
-      export function hash (input: string): Promise<string>
+      export function hash(input: string): Promise<string>
 
-      export function matchWithHash (input: string, hash: string): Promise<boolean>
+      export function matchWithHash(input: string, hash: string): Promise<boolean>
+
+      export function bcrypt(input: string): Promise<string>
+
+      export function matchWithBcrypt(input: string, hash: string): Promise<boolean>
     }
   }
 }
