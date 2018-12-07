@@ -6,7 +6,7 @@ declare module 'hestiaa' {
   import * as winston from 'winston'
 
   export namespace logging {
-    export const logger: winston.Logger
+    export const logger: (context?: string) => winston.Logger
   }
 
   export namespace errors {
