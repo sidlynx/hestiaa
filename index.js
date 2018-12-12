@@ -15,6 +15,10 @@ module.exports = {
     PaginatedResult: require('./lib/http/paginatedResult'),
     paginator: require('./lib/http/paginator')
   },
+  amqp: {
+    AmqpConsumer: require('./lib/amqp/amqpConsumer'),
+    AmqpProducer: require('./lib/amqp/amqpProducer')
+  },
   middleware: {
     LoggingHandler: require('./lib/middleware/loggingHandler'),
     UserTokenMiddleware: require('./lib/middleware/userTokenMiddleware')
