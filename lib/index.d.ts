@@ -107,7 +107,7 @@ declare module 'hestiaa' {
 
       close(): Promise<void>
 
-      addConsumeHandler(exchangeName: string, channelName: string, topic: string, messageHandler: (message: string) => Promise<any>): Promise<void>
+      addHandler(exchangeName: string, channelName: string, topic: string, messageHandler: (message: string) => Promise<any>): Promise<void>
     }
   }
 
