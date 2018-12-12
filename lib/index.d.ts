@@ -90,7 +90,7 @@ declare module 'hestiaa' {
   }
 
   export namespace amqp {
-    export class AMQPProducer {
+    export class AmqpProducer {
       constructor(brokerUrl: string)
 
       connect(): Promise<void>
@@ -100,7 +100,7 @@ declare module 'hestiaa' {
       sendMessage(message: any, exchangeName: string, channelName: string, topic: string): Promise<void>
     }
 
-    export class AMQPConsumer {
+    export class AmqpConsumer {
       constructor(brokerUrl: string)
 
       connect(): Promise<void>
