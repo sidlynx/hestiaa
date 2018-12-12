@@ -89,6 +89,28 @@ declare module 'hestiaa' {
     }
   }
 
+  export namespace amqp {
+    export class AMQPProducer {
+      constructor(brokerUrl: string)
+
+      connect(): Promise<void>
+
+      close(): Promise<void>
+
+      sendMessage(message: any, exchangeName: string, channelName: string, topic: string): Promise<void>
+    }
+
+    export class AMQPConsumer {
+      constructor(brokerUrl: string)
+
+      connect(): Promise<void>
+
+      close(): Promise<void>
+
+      addConsumeHandler(exchangeName: string, channelName: string, topic: string, messageHandler: (message: string) => Promise<any>): Promise<void>
+    }
+  }
+
   export namespace test {
     export const apiRequest: RequestAPI<RequestRequest, CoreOptions, RequiredUriUrl>
   }

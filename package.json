@@ -1,6 +1,6 @@
 {
   "name": "hestiaa",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
   "typings": "./lib/index.d.ts",
@@ -14,6 +14,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "amqplib": "^0.5.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cls-hooked": "^4.2.2",
