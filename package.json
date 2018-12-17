@@ -1,6 +1,6 @@
 {
   "name": "hestiaa",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Reusable elements of hbp microservices",
   "main": "index.js",
   "typings": "./lib/index.d.ts",
