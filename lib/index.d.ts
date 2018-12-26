@@ -172,5 +172,11 @@ declare module 'hestiaa' {
 
       export function matchWithBcrypt(input: string, hash: string): Promise<boolean>
     }
+
+    export class DbLocker {
+      getLock(lockname: string): Promise<boolean>
+
+      releaseLock(lockname: string): Promise<void>
+    }
   }
 }
