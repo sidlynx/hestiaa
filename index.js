@@ -44,6 +44,7 @@ module.exports = {
   utils: {
     circuitBreaker: require('./lib/utils/circuitBreaker'),
     currentUser: require('./lib/utils/currentUser'),
+    DbLocker: require('./lib/utils/dbLocker'),
     mongoritoUtils: require('./lib/utils/mongoritoUtils'),
     cryptographer: require('./lib/utils/cryptographer')
   }
